@@ -14,6 +14,6 @@ Step 2. Add the dependency
 
 ```gradle
 dependencies {
-    compile 'com.github.aucd29:locklistview:1.0.0'
+    compile 'com.github.aucd29:locklistview:1.0.1'
 }
 ```
