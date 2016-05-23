@@ -21,6 +21,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.github.aucd29:common:1.0.6'
 }
 
 // build a jar with source files
