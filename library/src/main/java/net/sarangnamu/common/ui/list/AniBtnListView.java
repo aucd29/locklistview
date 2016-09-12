@@ -109,7 +109,7 @@ public class AniBtnListView extends LockListView {
 
     protected int mSlidingMargin = 0, mRowId, mBtnLayoutId;
     protected View mCurrView;
-    protected boolean mCheckedList;
+    protected boolean mIsShowMenu;
 
     public AniBtnListView(Context context) {
         super(context);
@@ -164,7 +164,7 @@ public class AniBtnListView extends LockListView {
         final int moveX = mSlidingMargin;
         View tempView;
 
-        if (mCheckedList) {
+        if (mIsShowMenu) {
             endX = 0;
             tempView = (View) mCurrView.getParent();
             mCurrView = null;
@@ -174,7 +174,7 @@ public class AniBtnListView extends LockListView {
             mCurrView = view;
         }
 
-        mCheckedList = !mCheckedList;
+        mIsShowMenu = !mIsShowMenu;
         setLock();
 
         final ViewGroup row       = (ViewGroup) tempView.findViewById(mRowId);
@@ -197,20 +197,13 @@ public class AniBtnListView extends LockListView {
         objAni.start();
     }
 
-    public boolean isCheckedList() {
-        return mCheckedList;
-    }
-
-    public void resetCheckedList() {
-        mCheckedList = false;
-        mCurrView = null;
-        mIsScrollLock = false;
+    public boolean isShowMenu() {
+        return mIsShowMenu;
     }
 
     public void hideMenu() {
-        if (mCheckedList && mCurrView != null) {
+        if (mIsShowMenu && mCurrView != null) {
             toggleMenu(mCurrView);
-            resetCheckedList();
         }
     }
 }
