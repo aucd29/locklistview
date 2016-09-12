@@ -210,6 +210,7 @@ public class AniBtnListView extends LockListView {
     public void hideMenu() {
         if (mCheckedList && mCurrView != null) {
             toggleMenu(mCurrView);
+            resetCheckedList();
         }
     }
 }
