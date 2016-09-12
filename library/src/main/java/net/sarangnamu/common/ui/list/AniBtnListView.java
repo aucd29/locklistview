@@ -18,10 +18,12 @@
 package net.sarangnamu.common.ui.list;
 
 import net.sarangnamu.common.DimTool;
+import net.sarangnamu.common.ani.AnimatorEndListener;
+
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +98,7 @@ import org.slf4j.LoggerFactory;
     holder.row.setOnClickListener(MainActivity.this);
 
     - click
-    ((AniBtnListView) getListView()).showAnimation(v);
+    ((AniBtnListView) getListView()).toggleMenu(v);
  * }
  * </pre>
  *
@@ -123,16 +125,17 @@ public class AniBtnListView extends LockListView {
 
     @Override
     protected void initLayout() {
-        setOnTouchListener(new TouchUpListener() {
-            @Override
-            public void up() {
-                if (mCurrView != null) {
-                    showAnimation(mCurrView);
-                }
+        setOnTouchListener(() -> {
+            if (mCurrView != null) {
+                toggleMenu(mCurrView);
             }
         });
 
-        setSelector(getResources().getDrawable(android.R.color.transparent));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSelector(getResources().getDrawable(android.R.color.transparent, null));
+        } else {
+            setSelector(getResources().getDrawable(android.R.color.transparent));
+        }
     }
 
     protected int dpToPixelInt(int dp) {
@@ -151,7 +154,7 @@ public class AniBtnListView extends LockListView {
         mRowId = id;
     }
 
-    public void showAnimation(final View view) {
+    public void toggleMenu(final View view) {
         if (mRowId == 0 || mBtnLayoutId == 0) {
             mLog.error("mRowId == 0 || mBtnLayoutId == 0");
             return ;
@@ -177,32 +180,9 @@ public class AniBtnListView extends LockListView {
         final ViewGroup row       = (ViewGroup) tempView.findViewById(mRowId);
         final ViewGroup btnLayout = (ViewGroup) tempView.findViewById(mBtnLayoutId);
 
-        // resize button height
-        //ViewGroup.LayoutParams lp = btnLayout.getLayoutParams();
-        //lp.height = view.getHeight();
-        //btnLayout.setLayoutParams(lp);
-
-        //DLog.d(TAG, "===================================================================");
-        //DLog.d(TAG, "child info " + btnLayout.getChildCount());
-        //DLog.d(TAG, "row info " + row.getChildCount());
-
-        //for (int i=0; i<btnLayout.getChildCount(); ++i) {
-        //DLog.d(TAG, "before height " + btnLayout.getChildAt(i).getHeight());
-
-        //lp = btnLayout.getChildAt(i).getLayoutParams();
-        //lp.height = view.getHeight();
-        //btnLayout.getChildAt(i).setLayoutParams(lp);
-
-        //btnLayout.requestLayout();
-
-        //DLog.d(TAG, "child height " + btnLayout.getChildAt(i).getHeight());
-        //}
-
-        //DLog.d(TAG, "===================================================================");
-
         ObjectAnimator.ofFloat(btnLayout, "translationX", endX).start();
         final ObjectAnimator objAni = ObjectAnimator.ofFloat(row, "translationX", endX);
-        objAni.addListener(new AnimatorListener() {
+        objAni.addListener(new AnimatorEndListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 view.setClickable(false);
@@ -213,11 +193,6 @@ public class AniBtnListView extends LockListView {
                 objAni.removeAllListeners();
                 view.setClickable(true);
             }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) { }
-            @Override
-            public void onAnimationCancel(Animator animation) { }
         });
         objAni.start();
     }
@@ -230,5 +205,11 @@ public class AniBtnListView extends LockListView {
         mCheckedList = false;
         mCurrView = null;
         mIsScrollLock = false;
+    }
+
+    public void hideMenu() {
+        if (mCheckedList && mCurrView != null) {
+            toggleMenu(mCurrView);
+        }
     }
 }

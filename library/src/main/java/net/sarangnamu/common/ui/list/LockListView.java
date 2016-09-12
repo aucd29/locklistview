@@ -48,7 +48,6 @@ import android.widget.ListView;
  * @author <a href="mailto:aucd29@gmail.com">Burke Choi</a>
  */
 public class LockListView extends ListView {
-    //    private static final String TAG = "LockListView";
     protected boolean mIsScrollLock;
     private TouchUpListener mListener;
 
@@ -97,7 +96,7 @@ public class LockListView extends ListView {
     }
 
     public synchronized void setLock() {
-        mIsScrollLock = mIsScrollLock ? false : true;
+        mIsScrollLock = !mIsScrollLock;
     }
 
     public boolean getLockStatus() {
@@ -115,6 +114,6 @@ public class LockListView extends ListView {
     ////////////////////////////////////////////////////////////////////////////////////
 
     public interface TouchUpListener {
-        public void up();
+        void up();
     }
 }
