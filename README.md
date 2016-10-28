@@ -1,4 +1,5 @@
 # locklistview 
+[![Build Status](https://travis-ci.org/aucd29/locklistview.svg?branch=master)](https://travis-ci.org/aucd29/locklistview)
 
 Add it to your build.gradle with:
 ```gradle
