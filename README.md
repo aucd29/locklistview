@@ -18,3 +18,9 @@ dependencies {
     compile 'com.github.aucd29:locklistview:1.0.4'
 }
 ```
+```gradle
+// kotlin 
+dependencies {
+    implementation 'com.github.aucd29:locklistview:2.0.0'
+}
+```
