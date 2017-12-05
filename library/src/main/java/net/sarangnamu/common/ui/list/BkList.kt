@@ -78,6 +78,63 @@ open class LockListView : ListView {
     }
 }
 
+/**
+ * ```xml
+ * <net.sarangnamu.common.ui.list.AniBtnListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:drawSelectorOnTop="false" />
+
+        <!-- row xml -->
+        <RelativeLayout
+            android:id="@+id/row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp" >
+            <TextView
+                android:id="@+id/emsNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/btnLayout"
+            android:layout_width="124dp"
+            android:layout_height="62dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="-124dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/detail"
+                style="@style/btnLayout"
+                android:layout_width="62dp"
+                android:layout_height="match_parent"
+                android:background="#acacac"
+                android:text="@string/detail"
+                android:textColor="#ffffff" />
+            <TextView
+                android:id="@+id/delete"
+                style="@style/btnLayout"
+                android:layout_width="62dp"
+                android:layout_height="match_parent"
+                android:background="#ed594e"
+                android:text="@string/delete"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+ * ```
+ *
+ * ```kotlin
+ * list.slidingMargin(124)
+ * list.buttonLayoutId = R.id.btnLayout
+ * list.rowId = R.id.row
+ * ```
+ */
 open class AniBtnListView: LockListView {
     private val log = LoggerFactory.getLogger(AniBtnListView::class.java)
 
@@ -145,18 +202,16 @@ open class AniBtnListView: LockListView {
             val row: ViewGroup = it.findViewById(rowId)
             val btn: ViewGroup = it.findViewById(buttonLayoutId)
 
-            ObjectAnimator.ofFloat(btn, "translationX", endX.toFloat()).start()
-            val ani = ObjectAnimator.ofFloat(row, "translationX", endX.toFloat())
-            ani.addListener(object: Animator.AnimatorListener {
+            btn.animate().translationX(endX.toFloat()).start()
+            row.animate().translationX(endX.toFloat()).setListener(object: Animator.AnimatorListener {
                 override fun onAnimationRepeat(animation: Animator) {}
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationStart(animation: Animator) { view.isClickable = false }
                 override fun onAnimationEnd(animation: Animator) {
-                    ani.removeAllListeners()
+                    animation.removeAllListeners()
                     view.isClickable = true
                 }
-            })
-            ani.start()
+            }).start()
         }
     }
 
